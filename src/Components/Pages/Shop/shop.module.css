@@ -1,0 +1,10 @@
+.form-range{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.form-range input:focus{
+    border: none !important;
+    outline: none !important;
+    border-color: none !important;
+}

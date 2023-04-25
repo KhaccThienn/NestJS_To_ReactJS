@@ -1,0 +1,15 @@
+.nav-link {
+  display: block;
+  padding: 0.2rem 1rem;
+  text-decoration: none !important;
+  color: black;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #FF5A5F;
+}
