@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+// add the comment in each line for this fike
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import classNames from "classnames/bind";
 import style from "./shop.module.css";
 import { useNavigateSearch } from "../../../hooks";
@@ -24,23 +24,13 @@ function Shop() {
 
   const [keySearch, setKeySearch] = useState("");
 
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
-
-  // const [priceRange, setPriceRange] = useState({ min: "", max: "" });
+  const [priceRange, setPriceRange] = useState({ min: "", max: "" });
 
   const navigateSearch = useNavigateSearch();
 
-  const refresh_page = async () => {
-    // console.log("Click Event refresh_page: ", priceRange);
-    // const priceFilter = {
-    //   price: `${priceRange.min}-${priceRange.max}`,
-    // };
-
-    // setFilterValues({ ...filterValues, price: priceFilter.price });
-
-    await navigateSearch("/shop", filterValues);
-    console.log("Click Event refresh_page + filterValue: ", filterValues);
+  const handleSubmit = () => {
+    navigateSearch("/shop", { ...filterValues });
+    // navigateSearch("/shop", { ...filterValues, price: priceRange.min + '-' + priceRange.max });
   };
 
   const clearFilter = () => {
@@ -49,7 +39,6 @@ function Shop() {
   };
 
   const queryParams = new URLSearchParams(window.location.search).toString();
-  // console.log(queryParams.toString());
 
   const handleChange = async (e) => {
     const { name, value } = await e.target;
@@ -57,32 +46,28 @@ function Shop() {
   };
 
   const handleChangePrice = async (e) => {
-    e.preventDefault();
     const { name, value } = await e.target;
-    console.log("name: ", name);
-    console.log("value: ", value);
 
-    console.log(name == "min");
+    if (name === "min")
+      setPriceRange((priceRange) => ({
+        ...priceRange,
+        min: value,
+      }));
 
-    let minVal = "";
-    let maxVal = "";
-    if (name == "min") setMinPrice(value);
-    if (name == "max") setMaxPrice(value);
+    if (name === "max")
+      setPriceRange((priceRange) => ({
+        ...priceRange,
+        max: value,
+      }));
 
-    console.log("val: ", minPrice, maxPrice);
-
-
-    const priceFilter = {
-      price: `${minPrice}-${maxPrice}`,
-    };
-    
-    console.log("obj price filter: ", priceFilter);
-    setFilterValues({ ...filterValues, price: priceFilter.price });
-    console.log("Handle change price: ", filterValues);
+    setFilterValues({
+      ...filterValues,
+      price: `${priceRange.min}-${priceRange.max}`,
+    });
   };
 
+
   useEffect(() => {
-    // console.log("Changing UseEffect: ", priceRange);
     const getAllProduct = async () => {
       const data = await ProductService.getProdByReq(queryParams);
       const cates = await CategoryService.getAllCategory();
@@ -162,7 +147,7 @@ function Shop() {
           </div>
           <button
             className={cx("mt-3", "btn", "btn-outline-success", "btn-block")}
-            onClick={(e) => refresh_page(e)}
+            onClick={(e) => handleSubmit(e)}
           >
             Submit
           </button>
